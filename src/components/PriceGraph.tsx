@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts'
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react'
-import { flightApi } from '../services/flightApi'
+import { flightApi, type PriceHistory } from '../services/flightApi'
 
 interface PriceGraphProps {
   origin: string
@@ -18,7 +18,7 @@ interface ProcessedData {
 }
 
 export function PriceGraph({ origin, destination, departureDate, className = '' }: PriceGraphProps) {
-  const [priceHistory, setPriceHistory] = useState<any>([])
+  const [priceHistory, setPriceHistory] = useState<PriceHistory[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -30,7 +30,7 @@ export function PriceGraph({ origin, destination, departureDate, className = '' 
       // Use a mock flight ID for demonstration
       const mockFlightId = 'mock-flight-1'
       const history = await flightApi.getPriceHistory(mockFlightId, origin, destination)
-      setPriceHistory(history)
+      setPriceHistory(history || [])
     } catch (err) {
       setError('Failed to load price history')
       console.error('Error loading price history:', err)
