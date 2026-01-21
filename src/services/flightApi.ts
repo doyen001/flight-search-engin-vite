@@ -372,6 +372,7 @@ export class FlightApiService {
 
     } catch (error) {
       console.error('Price history error:', error)
+      return []
     }
   }
 
